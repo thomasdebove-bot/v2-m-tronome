@@ -1605,7 +1605,7 @@ def render_cr(
 
     actions_html = f"""
       <div class="actions noPrint">
-        <a class="btn" href="/cr/pdf?meeting_id={urllib.parse.quote(str(meeting_id))}&project={urllib.parse.quote(str(project))}&pinned_memos={urllib.parse.quote(str(pinned_memos))}&range_start={urllib.parse.quote(str(range_start_value))}&range_end={urllib.parse.quote(str(range_end_value))}">Imprimer / PDF</a>
+        <button class="btn" type="button" onclick="window.print()">Imprimer / PDF</button>
         <button class="btn secondary editCompact" id="btnQualityCheck" type="button">Qualité du texte</button>
         <button class="btn secondary editCompact" id="btnAnalysis" type="button">Analyse</button>
         <button class="btn secondary editCompact" id="btnRange" type="button" onclick="toggleRangePanel()">Choisir une période</button>
@@ -1942,7 +1942,7 @@ body{{padding:14px 14px 14px 280px;}}
 .wrap{{display:flex;flex-direction:column;gap:12px;align-items:center;}}
 .page{{width:210mm;min-height:297mm;position:relative;background:#fff;overflow:visible;break-after:page;page-break-after:always;}}
 .page:last-child{{break-after:auto;page-break-after:auto;}}
-.pageContent{{padding:10mm 8mm 34mm 8mm;}}
+.pageContent{{padding:22mm 8mm 34mm 8mm;}}
 .page--cover .pageContent{{padding-top:0;}}
 .muted{{color:var(--muted)}}
 .small{{font-size:12px}}
@@ -2136,6 +2136,8 @@ body{{padding:14px 14px 14px 280px;}}
 .coverTable .chip{{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:999px;padding:6px 10px;font-weight:800;background:#fff}}
 .coverNote{{margin-top:12px;border:1px solid var(--border);border-radius:14px;padding:12px;background:#fff;line-height:1.5}}
 .coverNoteTitle{{font-weight:1000;margin-bottom:6px}}
+.docHeader{{position:absolute;left:0;right:0;top:0;height:18mm;padding:4mm 10mm 0;border-bottom:1px solid #d1d5db;text-align:center;color:#4b5563;font-size:9px;}}
+.docHeader span{{font-weight:500;}}
 .reportHeader{{font-family:"Arial Nova Cond Light","Arial Narrow",Arial,sans-serif;font-size:11px;font-weight:400;color:#0b1220;text-align:center;margin:0 0 10px 0;}}
 @media print{{.printHeaderFixed{{position:sticky;top:0;background:#fff;padding:1mm 0;z-index:20;}}}}
 .reportHeader .accent{{color:#f59e0b;font-weight:900}}
@@ -2151,7 +2153,7 @@ body{{padding:14px 14px 14px 280px;}}
 .footMark{{max-height:48px}}
 .footRythme{{max-height:28px;margin:6px auto 0 auto}}
 .footTempo{{max-height:28px;margin-left:auto}}
-@media print{{body{{padding:0}} .actions,.rangePanel{{display:none!important}} .page{{width:210mm;min-height:297mm;margin:0;box-shadow:none;break-after:page;page-break-after:always;}} .page:last-child{{break-after:auto;page-break-after:auto;}}}}
+@media print{{body{{padding:0}} .actions,.rangePanel{{display:none!important}} .page{{width:210mm;min-height:297mm;margin:0;box-shadow:none;break-after:page;page-break-after:always;}} .page:last-child{{break-after:auto;page-break-after:auto;}} .docHeader{{position:fixed;top:0;left:0;right:0;}} .docFooter{{position:fixed;left:0;right:0;bottom:0;}}}}
 
 {EDITOR_MEMO_MODAL_CSS}
 {QUALITY_MODAL_CSS}
@@ -2291,6 +2293,7 @@ body{{padding:14px 14px 14px 280px;}}
   {actions_html}
   <div class="wrap">
     <section class="page page--cover">
+      <div class="docHeader"><span>CONDORCET — Compte Rendu n°06 — Réunion de Synthèse du 05/02/2026</span></div>
       <div class="pageContent">
         {cover_html}
         {top_html}
@@ -2299,6 +2302,7 @@ body{{padding:14px 14px 14px 280px;}}
     </section>
 
     <section class="page page--report">
+      <div class="docHeader"><span>CONDORCET — Compte Rendu n°06 — Réunion de Synthèse du 05/02/2026</span></div>
       <div class="pageContent">
         <div class="reportTables">
           {"" if pdf_export else report_header_html}
