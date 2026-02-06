@@ -36,35 +36,46 @@ from fastapi.responses import HTMLResponse, JSONResponse, Response
 
 app = FastAPI(title="TEMPO • CR Synthèse (METRONOME)")
 
-PDF_HEADER_TEMPLATE = """
+HEADER_HTML = """
 <div style="
-  font-size:9px;
   width:100%;
-  padding:0 10mm;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom:1px solid #e5e7eb;
-  font-family:'Arial Nova Cond Light','Arial Narrow',Arial,sans-serif;
+  font-size:9px;
+  color:#4b5563;
+  text-align:center;
+  border-bottom:1px solid #d1d5db;
+  padding-bottom:4px;
 ">
-  <span><b>{project}</b> — CR Synthèse Technique</span>
-  <span>Réunion du {meeting_date}</span>
+  <span style="font-weight:500;">
+    CONDORCET — Compte Rendu n°06 — Réunion de Synthèse du 05/02/2026
+  </span>
 </div>
 """
 
-PDF_FOOTER_TEMPLATE = """
+FOOTER_HTML = """
 <div style="
-  font-size:9px;
   width:100%;
-  padding:0 10mm;
+  font-size:8.5px;
+  color:#6b7280;
   display:flex;
   justify-content:space-between;
-  align-items:center;
-  color:#6b7280;
-  font-family:'Arial Nova Cond Light','Arial Narrow',Arial,sans-serif;
+  align-items:flex-end;
+  padding:0 10mm;
 ">
-  <span>TEMPO • Document généré automatiquement</span>
-  <span>Page <span class='pageNumber'></span>/<span class='totalPages'></span></span>
+  <!-- Gauche : logo / signature -->
+  <div style="width:33%; text-align:left;">
+    <span style="font-weight:600; color:#f59e0b;">TEMPO</span>
+  </div>
+
+  <!-- Centre : mentions -->
+  <div style="width:34%; text-align:center;">
+    104/106 rue Oberkampf — 75011 Paris<br/>
+    SAS au capital de 1 000 € — RCS Créteil 892 046 301
+  </div>
+
+  <!-- Droite : pagination -->
+  <div style="width:33%; text-align:right;">
+    Page <span class="pageNumber"></span> sur <span class="totalPages"></span>
+  </div>
 </div>
 """
 
@@ -2381,13 +2392,8 @@ async def cr_pdf(
     except MissingDataError as err:
         return HTMLResponse(render_missing_data_page(err), status_code=503)
 
-    mrow = meeting_row(meeting_id)
-    project_name = (project or str(mrow.get(M_COL_PROJECT_TITLE, ""))).strip() or "Projet"
-    meet_date = _parse_date_any(mrow.get(M_COL_DATE))
-    meeting_date_txt = _fmt_date(meet_date) or str(mrow.get(M_COL_DATE_DISPLAY, "") or "")
-
-    header_html = PDF_HEADER_TEMPLATE.format(project=_escape(project_name), meeting_date=_escape(meeting_date_txt))
-    footer_html = PDF_FOOTER_TEMPLATE
+    header_html = HEADER_HTML
+    footer_html = FOOTER_HTML
 
     async with async_playwright() as p:
         browser = await p.chromium.launch(args=["--no-sandbox"])
@@ -2400,8 +2406,8 @@ async def cr_pdf(
             header_template=header_html,
             footer_template=footer_html,
             margin={
-                "top": "25mm",
-                "bottom": "20mm",
+                "top": "22mm",
+                "bottom": "22mm",
                 "left": "15mm",
                 "right": "15mm",
             },
