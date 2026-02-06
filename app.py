@@ -727,8 +727,9 @@ def group_meeting_by_area(edf: pd.DataFrame) -> List[Tuple[str, pd.DataFrame]]:
 EDITOR_MEMO_MODAL_CSS = r"""
 .btnAddMemo{margin-left:auto; font-size:12px; padding:6px 10px; border:1px solid #ddd; border-radius:10px; background:#fff; cursor:pointer}
 .btnAddMemo:hover{background:#f7f7f7}
-.memoModal{position:fixed; inset:0; background:rgba(0,0,0,.35); display:none; align-items:center; justify-content:center; z-index:9999}
-.memoModal .panel{background:#fff; width:min(720px,92vw); max-height:80vh; overflow:auto; border-radius:14px; box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.memoModal{position:fixed; inset:0; padding:16px 16px 16px 290px; background:rgba(0,0,0,.35); display:none; align-items:flex-start; justify-content:center; overflow:auto; z-index:9999}
+.memoModal .panel{background:#fff; width:min(720px, calc(100vw - 330px)); max-height:calc(100vh - 32px); overflow:auto; border-radius:14px; box-shadow:0 20px 60px rgba(0,0,0,.25)}
+@media (max-width:1200px){.memoModal{padding:16px}.memoModal .panel{width:min(720px,94vw)}}
 .memoModal .head{display:flex; gap:12px; align-items:center; padding:14px 16px; border-bottom:1px solid #eee}
 .memoModal .list{padding:10px 16px}
 .memoModal .item{display:block; padding:10px 10px; border:1px solid #eee; border-radius:12px; margin:8px 0}
@@ -819,8 +820,9 @@ EDITOR_MEMO_MODAL_JS = r"""
 """
 
 QUALITY_MODAL_CSS = r"""
-.qualityModal{position:fixed; inset:0; background:rgba(0,0,0,.35); display:none; align-items:center; justify-content:center; z-index:9998}
-.qualityModal .panel{background:#fff; width:min(980px,94vw); max-height:86vh; overflow:auto; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.qualityModal{position:fixed; inset:0; padding:16px 16px 16px 290px; background:rgba(0,0,0,.35); display:none; align-items:flex-start; justify-content:center; overflow:auto; z-index:9998}
+.qualityModal .panel{background:#fff; width:min(980px, calc(100vw - 330px)); max-height:calc(100vh - 32px); overflow:auto; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.25)}
+@media (max-width:1200px){.qualityModal{padding:16px}.qualityModal .panel{width:min(980px,94vw)}}
 .qualityModal .head{display:flex; gap:12px; align-items:center; padding:16px 18px; border-bottom:1px solid #eee}
 .qualityModal .list{padding:14px 18px}
 .qualityModal .item{border:1px solid #e2e8f0; border-radius:14px; padding:12px; margin:10px 0; background:#fff}
@@ -930,8 +932,9 @@ QUALITY_MODAL_JS = r"""
 """
 
 ANALYSIS_MODAL_CSS = r"""
-.analysisModal{position:fixed; inset:0; background:rgba(0,0,0,.35); display:none; align-items:center; justify-content:center; z-index:9997}
-.analysisModal .panel{background:#fff; width:min(980px,94vw); max-height:86vh; overflow:auto; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.analysisModal{position:fixed; inset:0; padding:16px 16px 16px 290px; background:rgba(0,0,0,.35); display:none; align-items:flex-start; justify-content:center; overflow:auto; z-index:9997}
+.analysisModal .panel{background:#fff; width:min(980px, calc(100vw - 330px)); max-height:calc(100vh - 32px); overflow:auto; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.25)}
+@media (max-width:1200px){.analysisModal{padding:16px}.analysisModal .panel{width:min(980px,94vw)}}
 .analysisModal .head{display:flex; gap:12px; align-items:center; padding:16px 18px; border-bottom:1px solid #eee}
 .analysisModal .list{padding:14px 18px}
 .analysisCard{border:1px solid #e2e8f0; border-radius:14px; padding:12px; margin:10px 0; background:#fff}
@@ -1871,14 +1874,12 @@ def render_cr(
     css = f"""
 :root{{
   --bg:#ffffff;
-  --text:#111827;
+  --text:#0b1220;
   --muted:#475569;
-  --border:#bfd0de;
-  --soft:#f4f7fb;
+  --border:#e2e8f0;
+  --soft:#f8fafc;
   --shadow:0 10px 30px rgba(2,6,23,.06);
-  --accent:#123f45;
-  --accent-2:#f59e0b;
-  --accent-ink:#0f2f34;
+  --accent:#0f172a;
   --blueSoft:#eff6ff;
   --blueBorder:#bfdbfe;
   --col-type:7%;
@@ -1892,14 +1893,13 @@ def render_cr(
   --top-scale:1;
 }}
 *{{box-sizing:border-box}}
-html,body{{margin:0;padding:0;background:var(--bg);color:var(--text);font:13px/1.42 "Calibri","Arial",sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+html,body{{margin:0;padding:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial;-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
 body{{padding:14px 14px 14px 280px;}}
 .wrap{{display:flex;flex-direction:column;gap:12px;align-items:center;}}
 .page{{width:210mm;min-height:297mm;position:relative;background:#fff;overflow:visible;break-after:page;page-break-after:always;}}
 .page:last-child{{break-after:auto;page-break-after:auto;}}
 .pageContent{{padding:10mm 8mm 34mm 8mm;}}
 .page--cover .pageContent{{padding-top:0;}}
-.page--report .pageContent{{padding-top:18mm;}}
 .muted{{color:var(--muted)}}
 .small{{font-size:12px}}
 .noPrint{{}}
@@ -1965,12 +1965,12 @@ body{{padding:14px 14px 14px 280px;}}
   padding:14px 14px;border:1px solid var(--border);border-radius:16px;
   background:linear-gradient(180deg,#fff, var(--soft));
   font-weight:1000;font-size:16px;letter-spacing:.2px;
-  border-left:6px solid var(--accent);
+  border-left:6px solid #0f172a;
 }}
 .zoneTitle{{
   display:flex;align-items:center;gap:10px;
   padding:6px 10px;border:1px solid var(--border);border-bottom:none;
-  background:var(--accent);color:#ffffff;font-weight:900;font-size:11px;text-transform:uppercase;
+  background:#f59e0b;color:#ffffff;font-weight:900;font-size:11px;text-transform:uppercase;
 }}
 .zoneTitle button{{margin-left:auto}}
 .zoneTools{{display:flex;align-items:center;gap:6px;margin-left:auto}}
@@ -2039,14 +2039,14 @@ body{{padding:14px 14px 14px 280px;}}
 
 .zoneBlock{{margin:0}}
 .zoneBlock + .zoneBlock{{margin-top:0}}
-.crTable{{width:100%;border-collapse:collapse;table-layout:fixed;border:1px solid #8ba2b8;margin-top:-1px;}}
+.crTable{{width:100%;border-collapse:collapse;table-layout:fixed;border:1px solid var(--border);margin-top:-1px;}}
 .crTable thead{{display:table-header-group}}
 .crTable tfoot{{display:table-footer-group}}
-.crTable th, .crTable td{{border:1px solid #c8d4e0;padding:5px 6px;vertical-align:top;page-break-inside:avoid;break-inside:avoid;}}
+.crTable th, .crTable td{{border:1px solid var(--border);padding:7px 8px;vertical-align:top;page-break-inside:avoid;break-inside:avoid;}}
 .crTable tr{{page-break-inside:avoid;break-inside:avoid;}}
 .annexTable tr{{page-break-inside:avoid;break-inside:avoid;}}
-.crTable th{{background:var(--accent);color:#fff;text-align:center;font-weight:900;font-size:10.8px;line-height:1.2;white-space:nowrap}}
-.crTable td{{font-size:11px;line-height:1.3;word-break:normal;overflow-wrap:break-word;hyphens:none;background:#fff}}
+.crTable th{{background:#1f4e4f;color:#fff;text-align:center;font-weight:900;font-size:11px;line-height:1.2;white-space:nowrap}}
+.crTable td{{font-size:11px;line-height:1.3;word-break:normal;overflow-wrap:break-word;hyphens:none}}
 .crTable td.colDate, .crTable th.colDate{{padding:6px 4px}}
 
 .sessionSubRow td{{background:#ffffff;}}
@@ -2068,8 +2068,8 @@ body{{padding:14px 14px 14px 280px;}}
 
 @media print{{ .rowToggle{{display:none}} .noPrintRow{{display:none}} .editableCell{{background:transparent}} }}
 
-.crTable tr.rowMeeting td{{background:#e6f1f2;}}
-.crTable tr.rowMeeting td.colType{{box-shadow:inset 4px 0 0 var(--accent);font-weight:900;}}
+.crTable tr.rowMeeting td{{background:#eef8ff;}}
+.crTable tr.rowMeeting td.colType{{box-shadow:inset 4px 0 0 #2563eb;}}
 
 .thumbs{{margin-top:8px;display:flex;flex-wrap:wrap;gap:8px}}
 .thumb{{height:90px;width:auto;border:1px solid var(--border);border-radius:8px;display:block}}
@@ -2078,12 +2078,12 @@ body{{padding:14px 14px 14px 280px;}}
 .thumbA{{display:inline-flex}}
 .commentText{{font-weight:700;line-height:1.25}}
 .tagReminder{{color:#b91c1c;font-weight:900}}
-.annexTable{{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed;border:1px solid #8ba2b8}}
+.annexTable{{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed;border:1px solid var(--border)}}
 .annexTable thead{{display:table-header-group}}
-.annexTable th,.annexTable td{{border:1px solid #c8d4e0;padding:6px;text-align:left;vertical-align:top}}
-.annexTable td:first-child{{width:90px;color:var(--accent-ink);font-weight:900}}
-.annexTable th{{font-weight:900;background:var(--accent);color:#fff}}
-.annexTable .annexLink{{color:#b45309;font-weight:800;text-decoration:none}}
+.annexTable th,.annexTable td{{border-bottom:1px solid var(--border);padding:8px 6px;text-align:left;vertical-align:top}}
+.annexTable td:first-child{{width:90px;color:#2563eb;font-weight:900}}
+.annexTable th{{font-weight:900;background:#1f4e4f;color:#fff}}
+.annexTable .annexLink{{color:#f97316;font-weight:800;text-decoration:none}}
 .annexTable tr:last-child td{{border-bottom:none}}
 .coverTable{{margin:10px 0 12px 0}}
 .coverTable td:first-child{{width:260px;color:#0b1220;font-weight:900}}
@@ -2092,18 +2092,9 @@ body{{padding:14px 14px 14px 280px;}}
 .coverTable .chip{{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:999px;padding:6px 10px;font-weight:800;background:#fff}}
 .coverNote{{margin-top:12px;border:1px solid var(--border);border-radius:14px;padding:12px;background:#fff;line-height:1.5}}
 .coverNoteTitle{{font-weight:1000;margin-bottom:6px}}
-.reportHeader{{display:none;}}
-.tempoPrintHeader,.tempoPrintFooter{{display:none;}}
-.tempoPrintHeader{{border-bottom:1px solid #bfd0de;padding:3mm 0 2.5mm 0;background:#fff;}}
-.tempoPrintHeaderInner{{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;font-size:10.5px;line-height:1.2;color:#334155;}}
-.tempoPrintHeaderBrand{{font-weight:1000;color:var(--accent);text-transform:uppercase;letter-spacing:.14em}}
-.tempoPrintHeaderDoc{{font-weight:800;color:var(--accent-ink)}}
-.tempoPrintHeaderMeta{{font-weight:700;text-align:right;}}
-.tempoPrintFooter{{border-top:1px solid #bfd0de;padding-top:2mm;background:#fff;}}
-.tempoPrintFooterInner{{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;font-size:9.5px;color:#475569;line-height:1.25;}}
-.tempoPrintFooterBrand{{font-weight:1000;color:var(--accent-ink)}}
-.tempoPrintFooterLegal{{font-weight:600;}}
-.tempoPrintPage::before{{content:"Page " counter(page) " / " counter(pages);font-weight:900;color:var(--accent-ink);}}
+.reportHeader{{font-family:"Arial Nova Cond Light","Arial Narrow",Arial,sans-serif;font-size:11px;font-weight:400;color:#0b1220;text-align:center;margin:0 0 10px 0;}}
+@media print{{.printHeaderFixed{{position:sticky;top:0;background:#fff;padding:1mm 0;z-index:20;}}}}
+.reportHeader .accent{{color:#f59e0b;font-weight:900}}
 .presenceTable .presenceList{{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:6px}}
 .presenceTable .presenceLine{{display:flex;align-items:center;gap:8px;font-weight:700}}
 .docFooter{{position:absolute;left:0;right:0;bottom:0;height:24mm;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:3mm 10mm;border-top:1px solid #dbe5f0;background:#fff;overflow:hidden;width:100%;box-sizing:border-box}}
@@ -2117,18 +2108,6 @@ body{{padding:14px 14px 14px 280px;}}
 .footRythme{{max-height:28px;margin:6px auto 0 auto}}
 .footTempo{{max-height:28px;margin-left:auto}}
 @media print{{body{{padding:0}} .actions,.rangePanel{{display:none!important}} .page{{width:210mm;min-height:297mm;margin:0;box-shadow:none;break-after:page;page-break-after:always;}} .page:last-child{{break-after:auto;page-break-after:auto;}}}}
-
-@media print{{
-  @page {{ size: A4 portrait; margin: 10mm 10mm 22mm 10mm; }}
-  @page :first {{ margin: 0; }}
-  .page--cover{{break-after:page;page-break-after:always;}}
-  .page--cover .docFooter{{display:none!important;}}
-  .page--report .tempoPrintHeader,
-  .page--report .tempoPrintFooter{{display:block;position:fixed;left:10mm;right:10mm;z-index:30;}}
-  .page--report .tempoPrintHeader{{top:0;}}
-  .page--report .tempoPrintFooter{{bottom:0;}}
-  .page--report .docFooter{{display:none!important;}}
-}}
 
 {EDITOR_MEMO_MODAL_CSS}
 {QUALITY_MODAL_CSS}
@@ -2264,30 +2243,14 @@ body{{padding:14px 14px 14px 280px;}}
         {cover_html}
         {top_html}
       </div>
+      <div class="docFooter">
+        <div class="footLeft">{"<img class='footImg footMark' src='" + logo_tmark + "' alt='' />" if logo_tmark else ""}</div>
+        <div class="footCenter"><div style="font-size:22px;font-weight:900;color:#111">TEMPO</div><div class="tempoLegal">104/106 rue Oberkampf (Cité du figuier) — 75011 Paris<br/>SAS au capital de 1 000 Euros - RCS Créteil N° 892 046 301 - APE 7112 B</div>{("<img class='footImg footRythme' src='" + logo_rythme + "' alt='' />") if logo_rythme else ""}</div>
+        <div class="footRight">{"<img class='footImg footTempo' src='" + tempo_logo + "' alt='TEMPO' />" if tempo_logo else ""}</div>
+      </div>
     </section>
 
     <section class="page page--report">
-      <div class="tempoPrintHeader">
-        <div class="tempoPrintHeaderInner">
-          <div>
-            <div class="tempoPrintHeaderBrand">TEMPO</div>
-            <div class="tempoPrintHeaderDoc">Compte rendu de synthèse</div>
-          </div>
-          <div class="tempoPrintHeaderMeta">
-            <div>{_escape(project)}</div>
-            <div>Réunion du {_escape(cr_date_txt)}</div>
-          </div>
-        </div>
-      </div>
-      <div class="tempoPrintFooter">
-        <div class="tempoPrintFooterInner">
-          <div>
-            <div class="tempoPrintFooterBrand">TEMPO</div>
-            <div class="tempoPrintFooterLegal">104/106 rue Oberkampf (Cité du figuier) — 75011 Paris · SAS 1 000 € · RCS Créteil N° 892 046 301 · APE 7112 B</div>
-          </div>
-          <div class="tempoPrintPage"></div>
-        </div>
-      </div>
       <div class="pageContent">
         <div class="reportTables">
           {report_header_html}
