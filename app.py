@@ -1950,6 +1950,7 @@ def render_cr(
   --col-who:8%;
   --a4-width:210mm;
   --a4-padding-x:6mm;
+  --doc-header-height:22mm;
   --kpi-cols:4;
   --top-scale:1;
 }}
@@ -1959,8 +1960,8 @@ body{{padding:14px 14px 14px 280px;}}
 .wrap{{display:flex;flex-direction:column;gap:12px;align-items:center;}}
 .page{{width:210mm;min-height:297mm;position:relative;background:#fff;overflow:visible;break-after:page;page-break-after:always;}}
 .page:last-child{{break-after:auto;page-break-after:auto;}}
-.pageContent{{padding:30mm 8mm 34mm 8mm;}}
-.page--cover .pageContent{{padding-top:0;}}
+.pageContent{{padding:12mm 8mm 34mm 8mm;}}
+.page--cover .pageContent{{padding-top:12mm;}}
 .muted{{color:var(--muted)}}
 .small{{font-size:12px}}
 .noPrint{{}}
@@ -2160,7 +2161,8 @@ body{{padding:14px 14px 14px 280px;}}
 .coverTable .chip{{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:999px;padding:6px 10px;font-weight:800;background:#fff}}
 .coverNote{{margin-top:12px;border:1px solid var(--border);border-radius:14px;padding:12px;background:#fff;line-height:1.5}}
 .coverNoteTitle{{font-weight:1000;margin-bottom:6px}}
-.docHeader{{position:absolute;left:0;right:0;top:0;height:20mm;padding:4mm 10mm 0;border-bottom:1px solid #d1d5db;text-align:center;color:#4b5563;font-size:9px;background:#fff;z-index:4;}}
+.docHeader{{position:absolute;left:0;right:0;top:0;height:var(--doc-header-height);padding:4mm 10mm 0;border-bottom:1px solid #d1d5db;text-align:center;color:#4b5563;font-size:9px;background:#fff;z-index:30;}}
+.docHeaderSpacer{{height:var(--doc-header-height);background:#fff;}}
 .docHeader span{{font-weight:500;}}
 .reportHeader{{font-family:"Arial Nova Cond Light","Arial Narrow",Arial,sans-serif;font-size:11px;font-weight:400;color:#0b1220;text-align:center;margin:0 0 10px 0;}}
 @media print{{.printHeaderFixed{{position:sticky;top:0;background:#fff;padding:1mm 0;z-index:20;}}}}
@@ -2318,6 +2320,7 @@ body{{padding:14px 14px 14px 280px;}}
   <div class="wrap">
     <section class="page page--cover">
       <div class="docHeader"><span>CONDORCET — Compte Rendu n°06 — Réunion de Synthèse du 05/02/2026</span></div>
+      <div class="docHeaderSpacer"></div>
       <div class="pageContent">
         {cover_html}
         {top_html}
@@ -2327,6 +2330,7 @@ body{{padding:14px 14px 14px 280px;}}
 
     <section class="page page--report">
       <div class="docHeader"><span>CONDORCET — Compte Rendu n°06 — Réunion de Synthèse du 05/02/2026</span></div>
+      <div class="docHeaderSpacer"></div>
       <div class="pageContent">
         <div class="reportTables">
           {"" if pdf_export else report_header_html}
