@@ -2180,7 +2180,7 @@ body{{padding:14px 14px 14px 280px;}}
 .footMark{{max-height:48px}}
 .footRythme{{max-height:28px;margin:6px auto 0 auto}}
 .footTempo{{max-height:28px;margin-left:auto}}
-@media print{{body{{padding:0}} .actions,.rangePanel{{display:none!important}} .page{{width:210mm;min-height:297mm;margin:0;box-shadow:none;break-after:page;page-break-after:always;}} .page:last-child{{break-after:auto;page-break-after:auto;}} .pageContent{{padding:var(--doc-header-height) 8mm var(--doc-footer-height) 8mm;}} .docHeaderSpacer{{display:none;}} .docHeader{{position:fixed;top:0;left:0;right:0;background:#fff;}} .docFooter{{position:fixed;left:0;right:0;bottom:0;}}}}
+@media print{{body{{padding:0}} .actions,.rangePanel{{display:none!important}} .page{{width:210mm;min-height:297mm;margin:0;box-shadow:none;break-after:page;page-break-after:always;overflow:hidden;}} .page:last-child{{break-after:auto;page-break-after:auto;}} .pageContent{{padding:var(--doc-header-height) 8mm var(--doc-footer-height) 8mm;}} .docHeaderSpacer{{display:none;}} .docHeader{{position:absolute;top:0;left:0;right:0;background:#fff;}} .docFooter{{position:absolute;left:0;right:0;bottom:0;}} .zoneBlock,.crTable{{break-inside:avoid;page-break-inside:avoid;}}}}
 
 {EDITOR_MEMO_MODAL_CSS}
 {QUALITY_MODAL_CSS}
