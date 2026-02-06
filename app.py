@@ -32,52 +32,9 @@ from typing import Dict, List, Optional, Tuple
 
 import pandas as pd
 from fastapi import FastAPI, HTTPException, Query
-from fastapi.responses import HTMLResponse, JSONResponse, Response
+from fastapi.responses import HTMLResponse, JSONResponse
 
 app = FastAPI(title="TEMPO • CR Synthèse (METRONOME)")
-
-HEADER_HTML = """
-<div style="
-  width:100%;
-  font-size:9px;
-  color:#4b5563;
-  text-align:center;
-  border-bottom:1px solid #d1d5db;
-  padding-bottom:4px;
-">
-  <span style="font-weight:500;">
-    CONDORCET — Compte Rendu n°06 — Réunion de Synthèse du 05/02/2026
-  </span>
-</div>
-"""
-
-FOOTER_HTML = """
-<div style="
-  width:100%;
-  font-size:8.5px;
-  color:#6b7280;
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  padding:0 10mm;
-">
-  <!-- Gauche : logo / signature -->
-  <div style="width:33%; text-align:left;">
-    <span style="font-weight:600; color:#f59e0b;">TEMPO</span>
-  </div>
-
-  <!-- Centre : mentions -->
-  <div style="width:34%; text-align:center;">
-    104/106 rue Oberkampf — 75011 Paris<br/>
-    SAS au capital de 1 000 € — RCS Créteil 892 046 301
-  </div>
-
-  <!-- Droite : pagination -->
-  <div style="width:33%; text-align:right;">
-    Page <span class="pageNumber"></span> sur <span class="totalPages"></span>
-  </div>
-</div>
-"""
 
 # -------------------------
 # PATHS (UNC)
@@ -770,9 +727,8 @@ def group_meeting_by_area(edf: pd.DataFrame) -> List[Tuple[str, pd.DataFrame]]:
 EDITOR_MEMO_MODAL_CSS = r"""
 .btnAddMemo{margin-left:auto; font-size:12px; padding:6px 10px; border:1px solid #ddd; border-radius:10px; background:#fff; cursor:pointer}
 .btnAddMemo:hover{background:#f7f7f7}
-.memoModal{position:fixed; inset:0; padding:16px 16px 16px 290px; background:rgba(0,0,0,.35); display:none; align-items:flex-start; justify-content:center; overflow:auto; z-index:9999}
-.memoModal .panel{background:#fff; width:min(720px, calc(100vw - 330px)); max-height:calc(100vh - 32px); overflow:auto; border-radius:14px; box-shadow:0 20px 60px rgba(0,0,0,.25)}
-@media (max-width:1200px){.memoModal{padding:16px}.memoModal .panel{width:min(720px,94vw)}}
+.memoModal{position:fixed; inset:0; background:rgba(0,0,0,.35); display:none; align-items:center; justify-content:center; z-index:9999}
+.memoModal .panel{background:#fff; width:min(720px,92vw); max-height:80vh; overflow:auto; border-radius:14px; box-shadow:0 20px 60px rgba(0,0,0,.25)}
 .memoModal .head{display:flex; gap:12px; align-items:center; padding:14px 16px; border-bottom:1px solid #eee}
 .memoModal .list{padding:10px 16px}
 .memoModal .item{display:block; padding:10px 10px; border:1px solid #eee; border-radius:12px; margin:8px 0}
@@ -863,9 +819,8 @@ EDITOR_MEMO_MODAL_JS = r"""
 """
 
 QUALITY_MODAL_CSS = r"""
-.qualityModal{position:fixed; inset:0; padding:16px 16px 16px 290px; background:rgba(0,0,0,.35); display:none; align-items:flex-start; justify-content:center; overflow:auto; z-index:9998}
-.qualityModal .panel{background:#fff; width:min(980px, calc(100vw - 330px)); max-height:calc(100vh - 32px); overflow:auto; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.25)}
-@media (max-width:1200px){.qualityModal{padding:16px}.qualityModal .panel{width:min(980px,94vw)}}
+.qualityModal{position:fixed; inset:0; background:rgba(0,0,0,.35); display:none; align-items:center; justify-content:center; z-index:9998}
+.qualityModal .panel{background:#fff; width:min(980px,94vw); max-height:86vh; overflow:auto; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.25)}
 .qualityModal .head{display:flex; gap:12px; align-items:center; padding:16px 18px; border-bottom:1px solid #eee}
 .qualityModal .list{padding:14px 18px}
 .qualityModal .item{border:1px solid #e2e8f0; border-radius:14px; padding:12px; margin:10px 0; background:#fff}
@@ -975,9 +930,8 @@ QUALITY_MODAL_JS = r"""
 """
 
 ANALYSIS_MODAL_CSS = r"""
-.analysisModal{position:fixed; inset:0; padding:16px 16px 16px 290px; background:rgba(0,0,0,.35); display:none; align-items:flex-start; justify-content:center; overflow:auto; z-index:9997}
-.analysisModal .panel{background:#fff; width:min(980px, calc(100vw - 330px)); max-height:calc(100vh - 32px); overflow:auto; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.25)}
-@media (max-width:1200px){.analysisModal{padding:16px}.analysisModal .panel{width:min(980px,94vw)}}
+.analysisModal{position:fixed; inset:0; background:rgba(0,0,0,.35); display:none; align-items:center; justify-content:center; z-index:9997}
+.analysisModal .panel{background:#fff; width:min(980px,94vw); max-height:86vh; overflow:auto; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.25)}
 .analysisModal .head{display:flex; gap:12px; align-items:center; padding:16px 18px; border-bottom:1px solid #eee}
 .analysisModal .list{padding:14px 18px}
 .analysisCard{border:1px solid #e2e8f0; border-radius:14px; padding:12px; margin:10px 0; background:#fff}
@@ -1190,26 +1144,11 @@ LAYOUT_CONTROLS_JS = r"""
     if(!zone) return;
     if(action === 'highlight'){
       zone.classList.toggle('highlight');
-    }else if(action === 'page-break'){
-      zone.classList.toggle('pageBreakBefore');
     }else if(action === 'move-up'){
       move(zone, 'up');
     }else if(action === 'move-down'){
       move(zone, 'down');
-    }else if(action === 'add-spacer'){
-      const spacer = document.createElement('div');
-      spacer.className = 'manualSpacer';
-      spacer.setAttribute('contenteditable', 'true');
-      spacer.innerHTML = "<span class='spacerHint'>Espace éditable — cliquez pour ajuster</span><button class='removeSpacer noPrint' type='button'>×</button>";
-      zone.insertAdjacentElement('afterend', spacer);
     }
-  });
-
-  document.addEventListener('click', (e) => {
-    const btn = e.target.closest('.removeSpacer');
-    if(!btn) return;
-    const spacer = btn.closest('.manualSpacer');
-    if(spacer){ spacer.remove(); }
   });
 })();
 """
@@ -1467,7 +1406,6 @@ def render_cr(
     pinned_memos: str = "",
     range_start: str = "",
     range_end: str = "",
-    pdf_export: bool = False,
 ) -> str:
     mrow = meeting_row(meeting_id)
     meeting_entries = entries_for_meeting(meeting_id)
@@ -1796,8 +1734,6 @@ def render_cr(
               <button class="zoneBtn" type="button" data-action="move-up">↑</button>
               <button class="zoneBtn" type="button" data-action="move-down">↓</button>
               <button class="zoneBtn" type="button" data-action="highlight">Surligner</button>
-              <button class="zoneBtn" type="button" data-action="page-break">Saut page</button>
-              <button class="zoneBtn" type="button" data-action="add-spacer">Espace</button>
                                                         <button class="btnAddMemo" type="button" data-area="{zt}">+ Ajouter mémo</button>
             </div>
           </div>
@@ -1950,8 +1886,6 @@ def render_cr(
   --col-who:8%;
   --a4-width:210mm;
   --a4-padding-x:6mm;
-  --doc-header-height:22mm;
-  --doc-footer-height:24mm;
   --kpi-cols:4;
   --top-scale:1;
 }}
@@ -1961,14 +1895,14 @@ body{{padding:14px 14px 14px 280px;}}
 .wrap{{display:flex;flex-direction:column;gap:12px;align-items:center;}}
 .page{{width:210mm;min-height:297mm;position:relative;background:#fff;overflow:visible;break-after:page;page-break-after:always;}}
 .page:last-child{{break-after:auto;page-break-after:auto;}}
-.pageContent{{padding:12mm 8mm 34mm 8mm;}}
-.page--cover .pageContent{{padding-top:12mm;}}
+.pageContent{{padding:10mm 8mm 34mm 8mm;}}
+.page--cover .pageContent{{padding-top:0;}}
 .muted{{color:var(--muted)}}
 .small{{font-size:12px}}
 .noPrint{{}}
 @media print{{ .noPrint{{display:none!important}} }}
 @media print{{body{{padding:0;background:#fff}} .page{{margin:0;box-shadow:none}}}}
-@media screen{{body{{background:#e5e7eb;}} .page{{box-shadow:0 14px 30px rgba(15,23,42,.16)}} .docHeader{{position:sticky;top:0;}}}}
+@media screen{{body{{background:#e5e7eb;}} .page{{box-shadow:0 14px 30px rgba(15,23,42,.16)}}}}
 .topPage{{transform:scale(var(--top-scale));transform-origin:top left}}
 @media print{{.topPage{{margin:0;}}}}
 .reportTables{{margin-top:0}}
@@ -2040,15 +1974,8 @@ body{{padding:14px 14px 14px 280px;}}
 .zoneBtn{{border:1px solid #ffffff;background:#fff;border-radius:8px;padding:4px 8px;font-weight:800;cursor:pointer}}
 .zoneBlock.highlight{{box-shadow:0 0 0 2px #f59e0b inset; background:linear-gradient(180deg,#fff7ed,#fff)}}
 .zoneBlock.pageBreakBefore{{page-break-before:always}}
-.zoneBlock.pageBreakBefore::before{{content:"Saut de page";display:block;text-align:right;font-size:10px;color:#94a3b8;margin:4px 8px 0 0;}}
 .u-page-break{{break-before:page;page-break-before:always;}}
 .u-avoid-break{{break-inside:avoid;page-break-inside:avoid;}}
-
-.manualSpacer{{min-height:12mm;border:1px dashed #cbd5e1;border-radius:10px;margin:8px 0;padding:8px;display:flex;align-items:center;justify-content:space-between;color:#94a3b8;font-size:11px;resize:vertical;overflow:auto;background:#fff}}
-.manualSpacer:focus{{outline:2px solid #94a3b8}}
-.manualSpacer .spacerHint{{pointer-events:none}}
-.removeSpacer{{border:none;background:#e2e8f0;color:#475569;border-radius:999px;width:22px;height:22px;cursor:pointer;font-weight:900;line-height:1}}
-@media print{{.manualSpacer{{border:none;color:transparent;background:transparent}} .manualSpacer .spacerHint{{display:none}} .removeSpacer{{display:none}} .zoneBlock.pageBreakBefore::before{{display:none}}}}
 
 .presGrid{{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}}
 @media (max-width: 780px){{.presGrid{{grid-template-columns:1fr}}}}
@@ -2107,7 +2034,7 @@ body{{padding:14px 14px 14px 280px;}}
 /* PRINT TABLE */
 @page {{ size: A4 portrait; margin: 0; }}
 
-.zoneBlock{{margin:0 0 16px 0;break-inside:avoid;page-break-inside:avoid;}}
+.zoneBlock{{margin:0}}
 .zoneBlock + .zoneBlock{{margin-top:0}}
 .crTable{{width:100%;border-collapse:collapse;table-layout:fixed;border:1px solid var(--border);margin-top:-1px;}}
 .crTable thead{{display:table-header-group}}
@@ -2119,7 +2046,7 @@ body{{padding:14px 14px 14px 280px;}}
 .crTable td{{font-size:11px;line-height:1.3;word-break:normal;overflow-wrap:break-word;hyphens:none}}
 .crTable td.colDate, .crTable th.colDate{{padding:6px 4px}}
 
-.sessionSubRow td{{background:#f8fafc;}}
+.sessionSubRow td{{background:#ffffff;}}
 .sessionSubRow td.colType{{color:#94a3b8;font-weight:700;}}
 .sessionSubRow td.colComment{{font-size:12px;color:#111827;font-weight:900;text-decoration:none;}}
 .sessionSubRowCurrent td.colComment{{color:#1d4ed8;text-decoration:underline;text-underline-offset:2px;}}
@@ -2162,25 +2089,22 @@ body{{padding:14px 14px 14px 280px;}}
 .coverTable .chip{{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:999px;padding:6px 10px;font-weight:800;background:#fff}}
 .coverNote{{margin-top:12px;border:1px solid var(--border);border-radius:14px;padding:12px;background:#fff;line-height:1.5}}
 .coverNoteTitle{{font-weight:1000;margin-bottom:6px}}
-.docHeader{{position:absolute;left:0;right:0;top:0;height:var(--doc-header-height);padding:4mm 10mm 0;border-bottom:1px solid #d1d5db;text-align:center;color:#4b5563;font-size:9px;background:#fff;z-index:30;}}
-.docHeaderSpacer{{height:var(--doc-header-height);background:#fff;}}
-.docHeader span{{font-weight:500;}}
 .reportHeader{{font-family:"Arial Nova Cond Light","Arial Narrow",Arial,sans-serif;font-size:11px;font-weight:400;color:#0b1220;text-align:center;margin:0 0 10px 0;}}
 @media print{{.printHeaderFixed{{position:sticky;top:0;background:#fff;padding:1mm 0;z-index:20;}}}}
 .reportHeader .accent{{color:#f59e0b;font-weight:900}}
 .presenceTable .presenceList{{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:6px}}
 .presenceTable .presenceLine{{display:flex;align-items:center;gap:8px;font-weight:700}}
-.docFooter{{position:absolute;left:0;right:0;bottom:0;height:var(--doc-footer-height);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:3mm 10mm;border-top:1px solid #dbe5f0;background:#fff;overflow:hidden;width:100%;box-sizing:border-box}}
+.docFooter{{position:absolute;left:0;right:0;bottom:0;height:24mm;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:3mm 10mm;border-top:1px solid #dbe5f0;background:#fff;overflow:hidden;width:100%;box-sizing:border-box}}
 .docFooter::before{{content:"";position:absolute;left:0;bottom:0;width:170px;height:42px;background:#123f45;clip-path:polygon(0 100%,100% 100%,0 0)}}
 .docFooter::after{{content:"";position:absolute;right:0;bottom:0;width:260px;height:70px;background:#123f45;clip-path:polygon(100% 0,100% 100%,0 100%)}}
 .footLeft,.footCenter,.footRight{{position:relative;z-index:2}}
 .footCenter{{text-align:center;flex:1}}
-.tempoLegal{{font-family:"Arial Nova Cond Light","Arial Narrow",Arial,sans-serif;font-size:10px;line-height:1.3;color:#6b7280;font-weight:600}}
+.tempoLegal{{font-size:11px;line-height:1.3;color:#6b7280;font-weight:600}}
 .footImg{{display:block;max-height:32px;width:auto}}
 .footMark{{max-height:48px}}
 .footRythme{{max-height:28px;margin:6px auto 0 auto}}
 .footTempo{{max-height:28px;margin-left:auto}}
-@media print{{body{{padding:0}} .actions,.rangePanel{{display:none!important}} .page{{width:210mm;min-height:297mm;margin:0;box-shadow:none;break-after:page;page-break-after:always;overflow:hidden;}} .page:last-child{{break-after:auto;page-break-after:auto;}} .pageContent{{padding:var(--doc-header-height) 8mm var(--doc-footer-height) 8mm;}} .docHeaderSpacer{{display:none;}} .docHeader{{position:absolute;top:0;left:0;right:0;background:#fff;}} .docFooter{{position:absolute;left:0;right:0;bottom:0;}} .zoneBlock,.crTable{{break-inside:avoid;page-break-inside:avoid;}}}}
+@media print{{body{{padding:0}} .actions,.rangePanel{{display:none!important}} .page{{width:210mm;min-height:297mm;margin:0;box-shadow:none;break-after:page;page-break-after:always;overflow:hidden;}} .page:last-child{{break-after:auto;page-break-after:auto;}} .pageContent{{padding-bottom:36mm;}} .docFooter{{position:fixed;left:0;right:0;bottom:0;}}}}
 
 {EDITOR_MEMO_MODAL_CSS}
 {QUALITY_MODAL_CSS}
@@ -2297,14 +2221,6 @@ body{{padding:14px 14px 14px 280px;}}
     except MissingDataError:
         annexes_html = ""
 
-    footer_html = f"""
-      <div class="docFooter">
-        <div class="footLeft">{"<img class='footImg footMark' src='" + logo_tmark + "' alt='' />" if logo_tmark else ""}</div>
-        <div class="footCenter"><div style="font-family:'Arial Nova Cond Light','Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#111">TEMPO</div><div class="tempoLegal">104/106 rue Oberkampf (Cité du figuier) — 75011 Paris<br/>SAS au capital de 1 000 Euros - RCS Créteil N° 892 046 301 - APE 7112 B</div>{("<img class='footImg footRythme' src='" + logo_rythme + "' alt='' />") if logo_rythme else ""}</div>
-        <div class="footRight"></div>
-      </div>
-    """
-
     return f"""
 <!doctype html>
 <html lang="fr">
@@ -2320,21 +2236,21 @@ body{{padding:14px 14px 14px 280px;}}
   {actions_html}
   <div class="wrap">
     <section class="page page--cover">
-      <div class="docHeader"><span>CONDORCET — Compte Rendu n°06 — Réunion de Synthèse du 05/02/2026</span></div>
-      <div class="docHeaderSpacer"></div>
       <div class="pageContent">
         {cover_html}
         {top_html}
       </div>
-      {"" if pdf_export else footer_html}
+      <div class="docFooter">
+        <div class="footLeft">{"<img class='footImg footMark' src='" + logo_tmark + "' alt='' />" if logo_tmark else ""}</div>
+        <div class="footCenter"><div style="font-size:22px;font-weight:900;color:#111">TEMPO</div><div class="tempoLegal">104/106 rue Oberkampf (Cité du figuier) — 75011 Paris<br/>SAS au capital de 1 000 Euros - RCS Créteil N° 892 046 301 - APE 7112 B</div>{("<img class='footImg footRythme' src='" + logo_rythme + "' alt='' />") if logo_rythme else ""}</div>
+        <div class="footRight">{"<img class='footImg footTempo' src='" + tempo_logo + "' alt='TEMPO' />" if tempo_logo else ""}</div>
+      </div>
     </section>
 
     <section class="page page--report">
-      <div class="docHeader"><span>CONDORCET — Compte Rendu n°06 — Réunion de Synthèse du 05/02/2026</span></div>
-      <div class="docHeaderSpacer"></div>
       <div class="pageContent">
         <div class="reportTables">
-          {"" if pdf_export else report_header_html}
+          {report_header_html}
           {presence_html}
           {zones_html}
           {annexes_html}
@@ -2344,7 +2260,11 @@ body{{padding:14px 14px 14px 280px;}}
           </div>
         </div>
       </div>
-      {"" if pdf_export else footer_html}
+      <div class="docFooter">
+        <div class="footLeft">{"<img class='footImg footMark' src='" + logo_tmark + "' alt='' />" if logo_tmark else ""}</div>
+        <div class="footCenter"><div style="font-size:22px;font-weight:900;color:#111">TEMPO</div><div class="tempoLegal">104/106 rue Oberkampf (Cité du figuier) — 75011 Paris<br/>SAS au capital de 1 000 Euros - RCS Créteil N° 892 046 301 - APE 7112 B</div>{("<img class='footImg footRythme' src='" + logo_rythme + "' alt='' />") if logo_rythme else ""}</div>
+        <div class="footRight">{"<img class='footImg footTempo' src='" + tempo_logo + "' alt='TEMPO' />" if tempo_logo else ""}</div>
+      </div>
     </section>
   </div>
 
@@ -2397,67 +2317,6 @@ def cr(
         )
     except MissingDataError as err:
         return HTMLResponse(render_missing_data_page(err), status_code=503)
-
-
-@app.get("/cr/pdf")
-async def cr_pdf(
-    meeting_id: str = Query(...),
-    project: str = Query(default=""),
-    pinned_memos: str = Query(default=""),
-    range_start: str = Query(default=""),
-    range_end: str = Query(default=""),
-):
-    try:
-        from playwright.async_api import async_playwright
-    except Exception:
-        raise HTTPException(status_code=503, detail="Playwright indisponible sur ce serveur")
-
-    try:
-        html = render_cr(
-            meeting_id=meeting_id,
-            project=project,
-            print_mode=True,
-            pinned_memos=pinned_memos,
-            range_start=range_start,
-            range_end=range_end,
-            pdf_export=True,
-        )
-    except MissingDataError as err:
-        return HTMLResponse(render_missing_data_page(err), status_code=503)
-
-    header_html = HEADER_HTML
-    footer_html = FOOTER_HTML
-
-    mrow = meeting_row(meeting_id)
-    project_name = (project or str(mrow.get(M_COL_PROJECT_TITLE, ""))).strip() or "Projet"
-    meet_date = _parse_date_any(mrow.get(M_COL_DATE))
-    meeting_date_txt = _fmt_date(meet_date) or str(mrow.get(M_COL_DATE_DISPLAY, "") or "")
-
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(args=["--no-sandbox"])
-        page = await browser.new_page()
-        await page.set_content(html, wait_until="networkidle")
-        pdf_bytes = await page.pdf(
-            format="A4",
-            print_background=True,
-            display_header_footer=True,
-            header_template=header_html,
-            footer_template=footer_html,
-            margin={
-                "top": "22mm",
-                "bottom": "22mm",
-                "left": "15mm",
-                "right": "15mm",
-            },
-        )
-        await browser.close()
-
-    filename = re.sub(r"[^A-Za-z0-9._-]+", "_", f"CR_{project_name}_{meeting_date_txt}".strip("_"))
-    return Response(
-        content=pdf_bytes,
-        media_type="application/pdf",
-        headers={"Content-Disposition": f'inline; filename="{filename or "cr"}.pdf"'},
-    )
 
 
 @app.get("/health", response_class=JSONResponse)
