@@ -32,9 +32,41 @@ from typing import Dict, List, Optional, Tuple
 
 import pandas as pd
 from fastapi import FastAPI, HTTPException, Query
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, Response
 
 app = FastAPI(title="TEMPO • CR Synthèse (METRONOME)")
+
+PDF_HEADER_TEMPLATE = """
+<div style="
+  font-size:9px;
+  width:100%;
+  padding:0 10mm;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #e5e7eb;
+  font-family:'Arial Nova Cond Light','Arial Narrow',Arial,sans-serif;
+">
+  <span><b>{project}</b> — CR Synthèse Technique</span>
+  <span>Réunion du {meeting_date}</span>
+</div>
+"""
+
+PDF_FOOTER_TEMPLATE = """
+<div style="
+  font-size:9px;
+  width:100%;
+  padding:0 10mm;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:#6b7280;
+  font-family:'Arial Nova Cond Light','Arial Narrow',Arial,sans-serif;
+">
+  <span>TEMPO • Document généré automatiquement</span>
+  <span>Page <span class='pageNumber'></span>/<span class='totalPages'></span></span>
+</div>
+"""
 
 # -------------------------
 # PATHS (UNC)
@@ -1409,6 +1441,7 @@ def render_cr(
     pinned_memos: str = "",
     range_start: str = "",
     range_end: str = "",
+    pdf_export: bool = False,
 ) -> str:
     mrow = meeting_row(meeting_id)
     meeting_entries = entries_for_meeting(meeting_id)
@@ -1561,7 +1594,7 @@ def render_cr(
 
     actions_html = f"""
       <div class="actions noPrint">
-        <button class="btn" type="button" onclick="window.print()">Imprimer / PDF</button>
+        <a class="btn" href="/cr/pdf?meeting_id={urllib.parse.quote(str(meeting_id))}&project={urllib.parse.quote(str(project))}&pinned_memos={urllib.parse.quote(str(pinned_memos))}&range_start={urllib.parse.quote(str(range_start_value))}&range_end={urllib.parse.quote(str(range_end_value))}">Imprimer / PDF</a>
         <button class="btn secondary editCompact" id="btnQualityCheck" type="button">Qualité du texte</button>
         <button class="btn secondary editCompact" id="btnAnalysis" type="button">Analyse</button>
         <button class="btn secondary editCompact" id="btnRange" type="button" onclick="toggleRangePanel()">Choisir une période</button>
@@ -2037,7 +2070,7 @@ body{{padding:14px 14px 14px 280px;}}
 /* PRINT TABLE */
 @page {{ size: A4 portrait; margin: 0; }}
 
-.zoneBlock{{margin:0}}
+.zoneBlock{{margin:0 0 16px 0;break-inside:avoid;page-break-inside:avoid;}}
 .zoneBlock + .zoneBlock{{margin-top:0}}
 .crTable{{width:100%;border-collapse:collapse;table-layout:fixed;border:1px solid var(--border);margin-top:-1px;}}
 .crTable thead{{display:table-header-group}}
@@ -2049,7 +2082,7 @@ body{{padding:14px 14px 14px 280px;}}
 .crTable td{{font-size:11px;line-height:1.3;word-break:normal;overflow-wrap:break-word;hyphens:none}}
 .crTable td.colDate, .crTable th.colDate{{padding:6px 4px}}
 
-.sessionSubRow td{{background:#ffffff;}}
+.sessionSubRow td{{background:#f8fafc;}}
 .sessionSubRow td.colType{{color:#94a3b8;font-weight:700;}}
 .sessionSubRow td.colComment{{font-size:12px;color:#111827;font-weight:900;text-decoration:none;}}
 .sessionSubRowCurrent td.colComment{{color:#1d4ed8;text-decoration:underline;text-underline-offset:2px;}}
@@ -2224,6 +2257,14 @@ body{{padding:14px 14px 14px 280px;}}
     except MissingDataError:
         annexes_html = ""
 
+    footer_html = f"""
+      <div class="docFooter">
+        <div class="footLeft">{"<img class='footImg footMark' src='" + logo_tmark + "' alt='' />" if logo_tmark else ""}</div>
+        <div class="footCenter"><div style="font-family:'Arial Nova Cond Light','Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#111">TEMPO</div><div class="tempoLegal">104/106 rue Oberkampf (Cité du figuier) — 75011 Paris<br/>SAS au capital de 1 000 Euros - RCS Créteil N° 892 046 301 - APE 7112 B</div>{("<img class='footImg footRythme' src='" + logo_rythme + "' alt='' />") if logo_rythme else ""}</div>
+        <div class="footRight"></div>
+      </div>
+    """
+
     return f"""
 <!doctype html>
 <html lang="fr">
@@ -2243,17 +2284,13 @@ body{{padding:14px 14px 14px 280px;}}
         {cover_html}
         {top_html}
       </div>
-      <div class="docFooter">
-        <div class="footLeft">{"<img class='footImg footMark' src='" + logo_tmark + "' alt='' />" if logo_tmark else ""}</div>
-        <div class="footCenter"><div style="font-family:'Arial Nova Cond Light','Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#111">TEMPO</div><div class="tempoLegal">104/106 rue Oberkampf (Cité du figuier) — 75011 Paris<br/>SAS au capital de 1 000 Euros - RCS Créteil N° 892 046 301 - APE 7112 B</div>{("<img class='footImg footRythme' src='" + logo_rythme + "' alt='' />") if logo_rythme else ""}</div>
-        <div class="footRight"></div>
-      </div>
+      {"" if pdf_export else footer_html}
     </section>
 
     <section class="page page--report">
       <div class="pageContent">
         <div class="reportTables">
-          {report_header_html}
+          {"" if pdf_export else report_header_html}
           {presence_html}
           {zones_html}
           {annexes_html}
@@ -2263,11 +2300,7 @@ body{{padding:14px 14px 14px 280px;}}
           </div>
         </div>
       </div>
-      <div class="docFooter">
-        <div class="footLeft">{"<img class='footImg footMark' src='" + logo_tmark + "' alt='' />" if logo_tmark else ""}</div>
-        <div class="footCenter"><div style="font-family:'Arial Nova Cond Light','Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#111">TEMPO</div><div class="tempoLegal">104/106 rue Oberkampf (Cité du figuier) — 75011 Paris<br/>SAS au capital de 1 000 Euros - RCS Créteil N° 892 046 301 - APE 7112 B</div>{("<img class='footImg footRythme' src='" + logo_rythme + "' alt='' />") if logo_rythme else ""}</div>
-        <div class="footRight"></div>
-      </div>
+      {"" if pdf_export else footer_html}
     </section>
   </div>
 
@@ -2320,6 +2353,67 @@ def cr(
         )
     except MissingDataError as err:
         return HTMLResponse(render_missing_data_page(err), status_code=503)
+
+
+@app.get("/cr/pdf")
+async def cr_pdf(
+    meeting_id: str = Query(...),
+    project: str = Query(default=""),
+    pinned_memos: str = Query(default=""),
+    range_start: str = Query(default=""),
+    range_end: str = Query(default=""),
+):
+    try:
+        from playwright.async_api import async_playwright
+    except Exception:
+        raise HTTPException(status_code=503, detail="Playwright indisponible sur ce serveur")
+
+    try:
+        html = render_cr(
+            meeting_id=meeting_id,
+            project=project,
+            print_mode=True,
+            pinned_memos=pinned_memos,
+            range_start=range_start,
+            range_end=range_end,
+            pdf_export=True,
+        )
+    except MissingDataError as err:
+        return HTMLResponse(render_missing_data_page(err), status_code=503)
+
+    mrow = meeting_row(meeting_id)
+    project_name = (project or str(mrow.get(M_COL_PROJECT_TITLE, ""))).strip() or "Projet"
+    meet_date = _parse_date_any(mrow.get(M_COL_DATE))
+    meeting_date_txt = _fmt_date(meet_date) or str(mrow.get(M_COL_DATE_DISPLAY, "") or "")
+
+    header_html = PDF_HEADER_TEMPLATE.format(project=_escape(project_name), meeting_date=_escape(meeting_date_txt))
+    footer_html = PDF_FOOTER_TEMPLATE
+
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(args=["--no-sandbox"])
+        page = await browser.new_page()
+        await page.set_content(html, wait_until="networkidle")
+        pdf_bytes = await page.pdf(
+            format="A4",
+            print_background=True,
+            display_header_footer=True,
+            header_template=header_html,
+            footer_template=footer_html,
+            margin={
+                "top": "25mm",
+                "bottom": "20mm",
+                "left": "15mm",
+                "right": "15mm",
+            },
+        )
+        await browser.close()
+
+    filename = re.sub(r"[^A-Za-z0-9._-]+", "_", f"CR_{project_name}_{meeting_date_txt}".strip("_"))
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'inline; filename="{filename or "cr"}.pdf"'},
+    )
 
 
 @app.get("/health", response_class=JSONResponse)
