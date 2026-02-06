@@ -2395,6 +2395,11 @@ async def cr_pdf(
     header_html = HEADER_HTML
     footer_html = FOOTER_HTML
 
+    mrow = meeting_row(meeting_id)
+    project_name = (project or str(mrow.get(M_COL_PROJECT_TITLE, ""))).strip() or "Projet"
+    meet_date = _parse_date_any(mrow.get(M_COL_DATE))
+    meeting_date_txt = _fmt_date(meet_date) or str(mrow.get(M_COL_DATE_DISPLAY, "") or "")
+
     async with async_playwright() as p:
         browser = await p.chromium.launch(args=["--no-sandbox"])
         page = await browser.new_page()
