@@ -1959,7 +1959,7 @@ body{{padding:14px 14px 14px 280px;}}
 .wrap{{display:flex;flex-direction:column;gap:12px;align-items:center;}}
 .page{{width:210mm;min-height:297mm;position:relative;background:#fff;overflow:visible;break-after:page;page-break-after:always;}}
 .page:last-child{{break-after:auto;page-break-after:auto;}}
-.pageContent{{padding:26mm 8mm 34mm 8mm;}}
+.pageContent{{padding:30mm 8mm 34mm 8mm;}}
 .page--cover .pageContent{{padding-top:0;}}
 .muted{{color:var(--muted)}}
 .small{{font-size:12px}}
@@ -1969,7 +1969,7 @@ body{{padding:14px 14px 14px 280px;}}
 @media screen{{body{{background:#e5e7eb;}} .page{{box-shadow:0 14px 30px rgba(15,23,42,.16)}} .docHeader{{position:sticky;top:0;}}}}
 .topPage{{transform:scale(var(--top-scale));transform-origin:top left}}
 @media print{{.topPage{{margin:0;}}}}
-.reportTables{{margin-top:6mm}}
+.reportTables{{margin-top:0}}
 .coverHero{{position:relative;overflow:hidden;background:#fff;min-height:420px}}
 .coverHeroImg{{position:relative;min-height:430px;background-size:cover;background-position:center}}
 .coverHeroFade{{position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,0));}}
@@ -2160,7 +2160,7 @@ body{{padding:14px 14px 14px 280px;}}
 .coverTable .chip{{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:999px;padding:6px 10px;font-weight:800;background:#fff}}
 .coverNote{{margin-top:12px;border:1px solid var(--border);border-radius:14px;padding:12px;background:#fff;line-height:1.5}}
 .coverNoteTitle{{font-weight:1000;margin-bottom:6px}}
-.docHeader{{position:absolute;left:0;right:0;top:0;height:18mm;padding:4mm 10mm 0;border-bottom:1px solid #d1d5db;text-align:center;color:#4b5563;font-size:9px;background:#fff;z-index:3;}}
+.docHeader{{position:absolute;left:0;right:0;top:0;height:20mm;padding:4mm 10mm 0;border-bottom:1px solid #d1d5db;text-align:center;color:#4b5563;font-size:9px;background:#fff;z-index:4;}}
 .docHeader span{{font-weight:500;}}
 .reportHeader{{font-family:"Arial Nova Cond Light","Arial Narrow",Arial,sans-serif;font-size:11px;font-weight:400;color:#0b1220;text-align:center;margin:0 0 10px 0;}}
 @media print{{.printHeaderFixed{{position:sticky;top:0;background:#fff;padding:1mm 0;z-index:20;}}}}
