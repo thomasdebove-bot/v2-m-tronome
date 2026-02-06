@@ -1951,6 +1951,7 @@ def render_cr(
   --a4-width:210mm;
   --a4-padding-x:6mm;
   --doc-header-height:22mm;
+  --doc-footer-height:24mm;
   --kpi-cols:4;
   --top-scale:1;
 }}
@@ -2104,7 +2105,7 @@ body{{padding:14px 14px 14px 280px;}}
 .kpiCount{{font-weight:1000}}
 
 /* PRINT TABLE */
-@page {{ size: A4 portrait; margin: 0; }}
+@page {{ size: A4 portrait; margin: 22mm 0 24mm 0; }}
 
 .zoneBlock{{margin:0 0 16px 0;break-inside:avoid;page-break-inside:avoid;}}
 .zoneBlock + .zoneBlock{{margin-top:0}}
@@ -2169,7 +2170,7 @@ body{{padding:14px 14px 14px 280px;}}
 .reportHeader .accent{{color:#f59e0b;font-weight:900}}
 .presenceTable .presenceList{{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:6px}}
 .presenceTable .presenceLine{{display:flex;align-items:center;gap:8px;font-weight:700}}
-.docFooter{{position:absolute;left:0;right:0;bottom:0;height:24mm;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:3mm 10mm;border-top:1px solid #dbe5f0;background:#fff;overflow:hidden;width:100%;box-sizing:border-box}}
+.docFooter{{position:absolute;left:0;right:0;bottom:0;height:var(--doc-footer-height);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:3mm 10mm;border-top:1px solid #dbe5f0;background:#fff;overflow:hidden;width:100%;box-sizing:border-box}}
 .docFooter::before{{content:"";position:absolute;left:0;bottom:0;width:170px;height:42px;background:#123f45;clip-path:polygon(0 100%,100% 100%,0 0)}}
 .docFooter::after{{content:"";position:absolute;right:0;bottom:0;width:260px;height:70px;background:#123f45;clip-path:polygon(100% 0,100% 100%,0 100%)}}
 .footLeft,.footCenter,.footRight{{position:relative;z-index:2}}
@@ -2179,7 +2180,7 @@ body{{padding:14px 14px 14px 280px;}}
 .footMark{{max-height:48px}}
 .footRythme{{max-height:28px;margin:6px auto 0 auto}}
 .footTempo{{max-height:28px;margin-left:auto}}
-@media print{{body{{padding:0}} .actions,.rangePanel{{display:none!important}} .page{{width:210mm;min-height:297mm;margin:0;box-shadow:none;break-after:page;page-break-after:always;}} .page:last-child{{break-after:auto;page-break-after:auto;}} .docHeader{{position:fixed;top:0;left:0;right:0;background:#fff;}} .docFooter{{position:fixed;left:0;right:0;bottom:0;}}}}
+@media print{{body{{padding:0}} .actions,.rangePanel{{display:none!important}} .page{{width:210mm;min-height:297mm;margin:0;box-shadow:none;break-after:page;page-break-after:always;}} .page:last-child{{break-after:auto;page-break-after:auto;}} .pageContent{{padding:0 8mm;}} .docHeaderSpacer{{display:none;}} .docHeader{{position:fixed;top:0;left:0;right:0;background:#fff;}} .docFooter{{position:fixed;left:0;right:0;bottom:0;}}}}
 
 {EDITOR_MEMO_MODAL_CSS}
 {QUALITY_MODAL_CSS}
