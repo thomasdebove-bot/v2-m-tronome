@@ -1190,11 +1190,26 @@ LAYOUT_CONTROLS_JS = r"""
     if(!zone) return;
     if(action === 'highlight'){
       zone.classList.toggle('highlight');
+    }else if(action === 'page-break'){
+      zone.classList.toggle('pageBreakBefore');
     }else if(action === 'move-up'){
       move(zone, 'up');
     }else if(action === 'move-down'){
       move(zone, 'down');
+    }else if(action === 'add-spacer'){
+      const spacer = document.createElement('div');
+      spacer.className = 'manualSpacer';
+      spacer.setAttribute('contenteditable', 'true');
+      spacer.innerHTML = "<span class='spacerHint'>Espace éditable — cliquez pour ajuster</span><button class='removeSpacer noPrint' type='button'>×</button>";
+      zone.insertAdjacentElement('afterend', spacer);
     }
+  });
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.removeSpacer');
+    if(!btn) return;
+    const spacer = btn.closest('.manualSpacer');
+    if(spacer){ spacer.remove(); }
   });
 })();
 """
@@ -1781,6 +1796,8 @@ def render_cr(
               <button class="zoneBtn" type="button" data-action="move-up">↑</button>
               <button class="zoneBtn" type="button" data-action="move-down">↓</button>
               <button class="zoneBtn" type="button" data-action="highlight">Surligner</button>
+              <button class="zoneBtn" type="button" data-action="page-break">Saut page</button>
+              <button class="zoneBtn" type="button" data-action="add-spacer">Espace</button>
                                                         <button class="btnAddMemo" type="button" data-area="{zt}">+ Ajouter mémo</button>
             </div>
           </div>
@@ -2021,8 +2038,15 @@ body{{padding:14px 14px 14px 280px;}}
 .zoneBtn{{border:1px solid #ffffff;background:#fff;border-radius:8px;padding:4px 8px;font-weight:800;cursor:pointer}}
 .zoneBlock.highlight{{box-shadow:0 0 0 2px #f59e0b inset; background:linear-gradient(180deg,#fff7ed,#fff)}}
 .zoneBlock.pageBreakBefore{{page-break-before:always}}
+.zoneBlock.pageBreakBefore::before{{content:"Saut de page";display:block;text-align:right;font-size:10px;color:#94a3b8;margin:4px 8px 0 0;}}
 .u-page-break{{break-before:page;page-break-before:always;}}
 .u-avoid-break{{break-inside:avoid;page-break-inside:avoid;}}
+
+.manualSpacer{{min-height:12mm;border:1px dashed #cbd5e1;border-radius:10px;margin:8px 0;padding:8px;display:flex;align-items:center;justify-content:space-between;color:#94a3b8;font-size:11px;resize:vertical;overflow:auto;background:#fff}}
+.manualSpacer:focus{{outline:2px solid #94a3b8}}
+.manualSpacer .spacerHint{{pointer-events:none}}
+.removeSpacer{{border:none;background:#e2e8f0;color:#475569;border-radius:999px;width:22px;height:22px;cursor:pointer;font-weight:900;line-height:1}}
+@media print{{.manualSpacer{{border:none;color:transparent;background:transparent}} .manualSpacer .spacerHint{{display:none}} .removeSpacer{{display:none}} .zoneBlock.pageBreakBefore::before{{display:none}}}}
 
 .presGrid{{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}}
 @media (max-width: 780px){{.presGrid{{grid-template-columns:1fr}}}}
