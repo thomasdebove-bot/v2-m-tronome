@@ -2102,7 +2102,7 @@ body{{padding:14px 14px 14px 280px;}}
 .docFooter::after{{content:"";position:absolute;right:0;bottom:0;width:260px;height:70px;background:#123f45;clip-path:polygon(100% 0,100% 100%,0 100%)}}
 .footLeft,.footCenter,.footRight{{position:relative;z-index:2}}
 .footCenter{{text-align:center;flex:1}}
-.tempoLegal{{font-size:11px;line-height:1.3;color:#6b7280;font-weight:600}}
+.tempoLegal{{font-family:"Arial Nova Cond Light","Arial Narrow",Arial,sans-serif;font-size:10px;line-height:1.3;color:#6b7280;font-weight:600}}
 .footImg{{display:block;max-height:32px;width:auto}}
 .footMark{{max-height:48px}}
 .footRythme{{max-height:28px;margin:6px auto 0 auto}}
@@ -2245,8 +2245,8 @@ body{{padding:14px 14px 14px 280px;}}
       </div>
       <div class="docFooter">
         <div class="footLeft">{"<img class='footImg footMark' src='" + logo_tmark + "' alt='' />" if logo_tmark else ""}</div>
-        <div class="footCenter"><div style="font-size:22px;font-weight:900;color:#111">TEMPO</div><div class="tempoLegal">104/106 rue Oberkampf (Cité du figuier) — 75011 Paris<br/>SAS au capital de 1 000 Euros - RCS Créteil N° 892 046 301 - APE 7112 B</div>{("<img class='footImg footRythme' src='" + logo_rythme + "' alt='' />") if logo_rythme else ""}</div>
-        <div class="footRight">{"<img class='footImg footTempo' src='" + tempo_logo + "' alt='TEMPO' />" if tempo_logo else ""}</div>
+        <div class="footCenter"><div style="font-family:'Arial Nova Cond Light','Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#111">TEMPO</div><div class="tempoLegal">104/106 rue Oberkampf (Cité du figuier) — 75011 Paris<br/>SAS au capital de 1 000 Euros - RCS Créteil N° 892 046 301 - APE 7112 B</div>{("<img class='footImg footRythme' src='" + logo_rythme + "' alt='' />") if logo_rythme else ""}</div>
+        <div class="footRight"></div>
       </div>
     </section>
 
@@ -2265,8 +2265,8 @@ body{{padding:14px 14px 14px 280px;}}
       </div>
       <div class="docFooter">
         <div class="footLeft">{"<img class='footImg footMark' src='" + logo_tmark + "' alt='' />" if logo_tmark else ""}</div>
-        <div class="footCenter"><div style="font-size:22px;font-weight:900;color:#111">TEMPO</div><div class="tempoLegal">104/106 rue Oberkampf (Cité du figuier) — 75011 Paris<br/>SAS au capital de 1 000 Euros - RCS Créteil N° 892 046 301 - APE 7112 B</div>{("<img class='footImg footRythme' src='" + logo_rythme + "' alt='' />") if logo_rythme else ""}</div>
-        <div class="footRight">{"<img class='footImg footTempo' src='" + tempo_logo + "' alt='TEMPO' />" if tempo_logo else ""}</div>
+        <div class="footCenter"><div style="font-family:'Arial Nova Cond Light','Arial Narrow',Arial,sans-serif;font-size:12px;font-weight:700;color:#111">TEMPO</div><div class="tempoLegal">104/106 rue Oberkampf (Cité du figuier) — 75011 Paris<br/>SAS au capital de 1 000 Euros - RCS Créteil N° 892 046 301 - APE 7112 B</div>{("<img class='footImg footRythme' src='" + logo_rythme + "' alt='' />") if logo_rythme else ""}</div>
+        <div class="footRight"></div>
       </div>
     </section>
   </div>
